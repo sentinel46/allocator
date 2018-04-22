@@ -1,1 +1,1 @@
-Hello World project for OTUS C++
+Allocator project for OTUS C++

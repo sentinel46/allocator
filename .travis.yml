@@ -1,0 +1,21 @@
+language: cpp
+before_install:
+  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+  - sudo apt-get update -qq
+install:
+#  - sudo apt-get install g++-6 cmake libboost-test-dev libboost-program-options-dev -y
+  - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 90
+script:
+  - gcc --version
+  - g++ --version
+  - cmake --version
+  - cmake .
+  - cmake --build .
+  - cmake --build . --target test
+  - cmake --build . --target package
+deploy:
+  provider: script
+  skip_cleanup: true
+  script:
+  - curl -T helloworld-0.0.$TRAVIS_BUILD_NUMBER-Linux.deb -usentinel46:$BINTRAY_API_KEY
+    "https://api.bintray.com/content/sentinel46/cpp-otus/helloworld/$TRAVIS_BUILD_NUMBER/helloworld-0.0.$TRAVIS_BUILD_NUMBER-Linux.deb;deb_distribution=trusty;deb_component=main;deb_architecture=amd64;publish=1"
