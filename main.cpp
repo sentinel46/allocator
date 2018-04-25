@@ -1,12 +1,10 @@
-#include "newdelete.h"
 
+#include "newdelete.h"
 #include <iostream>
 #include <algorithm>
 #include <map>
 #include <iterator>
-
 #include "allocator.h"
-
 
 constexpr auto factorial(auto n) -> decltype(n)
 {
@@ -26,9 +24,12 @@ static_assert(factorial(0) ==                 1, "factorial failed!");
 
 int main()
 {
+    std::cout << "-------------- my::alloc_counter=" << my::alloc_counter << std::endl;
+
     auto make_factorial_value = [i=0]() mutable
     {
         auto f = factorial(i);
+        std::cout << i << " " << f << std::endl;
         auto value = std::make_pair(i,f);
         ++i;
         return value;
@@ -38,24 +39,27 @@ int main()
     {
         std::map<int, int> m1;
         std::generate_n(std::inserter(m1, std::begin(m1)),
-                        10,
+                        15,
                         make_factorial_value);
 
-//        for (const auto& p: m1)
-//            std::cout << p.first << " " << p.second << std::endl;
+        //for (const auto& p: m1)
+        //    std::cout << p.first << " " << p.second << std::endl;
 
         std::map<int, int, std::less<int>, my::allocator<std::pair<const int, int>, 10>> m2;
         std::generate_n(std::inserter(m2, std::begin(m2)),
-                        10,
+                        15,
                         make_factorial_value);
 
-//        for (const auto& p: m2)
-//            std::cout << p.first << " " << p.second << std::endl;
+        if (false)
+        for (const auto& p: m2)
+            std::cout << p.first << " " << p.second << std::endl;
     }
     catch(const std::exception &e)
     {
         std::cerr << e.what() << std::endl;
     }
+
+    std::cout << "-------------- my::alloc_counter=" << my::alloc_counter << std::endl;
 
     return 0;
 }

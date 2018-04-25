@@ -36,7 +36,8 @@ public:
            throw std::invalid_argument("Invalid numbers of elemens for allocate()");
 
        _pool.resize(1 + _index / capacity);
-       T *p = &_pool[_index/capacity][_index%capacity];
+       _pool[_index/capacity].resize(capacity);
+       T *p = reinterpret_cast<T*>(&_pool[_index/capacity][_index%capacity]);
        _index += n;
        return p;
     }
@@ -55,7 +56,8 @@ public:
     }
 
 private:
-    std::vector<std::array<T, capacity>> _pool;
+    //std::vector<std::array<T, capacity>> _pool;  // T() будет вызван capacity раз
+    std::vector<std::vector<std::array<unsigned char, sizeof(T)>>> _pool;
     size_t _index = 0;
 };
 

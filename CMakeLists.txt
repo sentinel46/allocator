@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.2)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++14")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 
 project(allocator)
 
@@ -20,8 +20,9 @@ add_executable(${PROJECT_NAME}
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     CXX_STANDARD 14
-    CXX_STANDARD_REQUIRED ON
-    COMPILE_OPTIONS -Wpedantic -Wall -Wextra)
+    CXX_STANDARD_REQUIRED ON)
+
+add_compile_options(-Wall -Wextra)
 
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
 
