@@ -12,7 +12,8 @@ set(SOURCES
 
 set(HEADERS
     allocator.h
-    newdelete.h)
+    newdelete.h
+    vec.h)
 
 add_executable(${PROJECT_NAME}
     ${SOURCES}

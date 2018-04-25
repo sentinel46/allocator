@@ -5,6 +5,7 @@
 #include <map>
 #include <iterator>
 #include "allocator.h"
+#include "vec.h"
 
 constexpr auto factorial(auto n) -> decltype(n)
 {
@@ -45,6 +46,8 @@ int main()
         //for (const auto& p: m1)
         //    std::cout << p.first << " " << p.second << std::endl;
 
+        std::cout << "-------------- my::alloc --------------\n";
+
         std::map<int, int, std::less<int>, my::allocator<std::pair<const int, int>, 10>> m2;
         std::generate_n(std::inserter(m2, std::begin(m2)),
                         15,
@@ -53,6 +56,9 @@ int main()
         if (false)
         for (const auto& p: m2)
             std::cout << p.first << " " << p.second << std::endl;
+
+        my::Vec<int> vec;
+        vec.push_back(10);
     }
     catch(const std::exception &e)
     {
