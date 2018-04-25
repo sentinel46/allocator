@@ -2,7 +2,11 @@ cmake_minimum_required(VERSION 3.2)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 
-project(allocator)
+set(VER 0.0.1)
+if($ENV{TRAVIS_BUILD_NUMBER})
+    set(VER 0.0.$ENV{TRAVIS_BUILD_NUMBER})
+endif()
+project(allocator VERSION ${VER})
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
