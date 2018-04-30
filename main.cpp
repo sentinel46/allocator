@@ -1,14 +1,11 @@
+//#include "newdelete.h"
 
-#include "newdelete.h"
-
-#include <ios>
 #include <iostream>
-#include <vector>
 #include <map>
 #include <algorithm>
 
 #include "allocator.h"
-#include "list2.h"
+#include "linkedlist.h"
 
 constexpr auto factorial(auto n) -> decltype(n)
 {
@@ -28,7 +25,7 @@ static_assert(factorial(0) ==                 1, "factorial failed!");
 
 int main()
 {
-    std::cout << "-------------- my::alloc_counter=" << my::alloc_counter << std::endl;
+//    std::cout << "-------------- my::alloc_counter=" << my::alloc_counter << std::endl;
 
     auto make_factorial_value = [i=0]() mutable
     {
@@ -40,14 +37,15 @@ int main()
 
     try
     {
-/*        std::map<int, int> m1;
+        //---
+        std::map<int, int> m1;
         std::generate_n(std::inserter(m1, std::begin(m1)),
                         10,
                         make_factorial_value);
 
         for (const auto& p: m1)
             std::cout << p.first << " " << p.second << std::endl;
-
+        //---
         std::map<int, int, std::less<int>, my::allocator<std::pair<const int, int>, 10>> m2;
         std::generate_n(std::inserter(m2, std::begin(m2)),
                         10,
@@ -55,27 +53,28 @@ int main()
 
         for (const auto& p: m2)
             std::cout << p.first << " " << p.second << std::endl;
-*/
+        //---
         my::LinkedList<int> l1;
         for (auto i = 0; i < 10; ++i)
             l1.append(factorial(i));
 
         for (const auto& i: l1)
             std::cout << i << std::endl;
-/**/
+        //---
         my::LinkedList<int, my::allocator<int, 10>> l2;
         for (auto i = 0; i < 10; ++i)
             l2.append(factorial(i));
 
         for (const auto& i: l2)
             std::cout << i << std::endl;
+        //---
     }
     catch(const std::exception &e)
     {
         std::cerr << e.what() << std::endl;
     }
 
-    std::cout << "-------------- my::alloc_counter=" << my::alloc_counter << std::endl;
+//    std::cout << "-------------- my::alloc_counter=" << my::alloc_counter << std::endl;
 
     return 0;
 }

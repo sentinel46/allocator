@@ -22,4 +22,4 @@ void free(void *p) noexcept
     return;
 }
 
-}
+}   // namespace my

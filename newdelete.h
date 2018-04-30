@@ -64,4 +64,4 @@ inline void operator delete[](void *p, long unsigned int)
     my::free(p);
 }
 
-}
+}   // namespace my

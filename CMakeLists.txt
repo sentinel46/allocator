@@ -17,9 +17,7 @@ set(SOURCES
 set(HEADERS
     allocator.h
     newdelete.h
-    list.h
-    list2.h
-    vec2.h)
+    linkedlist.h)
 
 add_executable(${PROJECT_NAME}
     ${SOURCES}

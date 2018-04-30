@@ -1,6 +1,7 @@
 #pragma once
 
-#include "newdelete.h"
+//#include "newdelete.h"
+
 #include <array>
 #include <memory>
 #include <vector>
@@ -61,4 +62,4 @@ private:
     size_t _index = 0;
 };
 
-}
+}   // namespace my
