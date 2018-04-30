@@ -1,12 +1,13 @@
 
 #include "newdelete.h"
+
+#include <ios>
 #include <iostream>
-#include <algorithm>
+#include <vector>
 #include <map>
-#include <list>
-#include <iterator>
+#include <algorithm>
+
 #include "allocator.h"
-#include "vec.h"
 #include "list2.h"
 
 constexpr auto factorial(auto n) -> decltype(n)
@@ -39,8 +40,7 @@ int main()
 
     try
     {
-/*
-        std::map<int, int> m1;
+/*        std::map<int, int> m1;
         std::generate_n(std::inserter(m1, std::begin(m1)),
                         10,
                         make_factorial_value);
@@ -62,8 +62,8 @@ int main()
 
         for (const auto& i: l1)
             std::cout << i << std::endl;
-
-        my::LinkedList<int, my::allocator<my::Node<int>, 10>> l2;
+/**/
+        my::LinkedList<int, my::allocator<int, 10>> l2;
         for (auto i = 0; i < 10; ++i)
             l2.append(factorial(i));
 
