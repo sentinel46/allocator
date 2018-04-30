@@ -3,9 +3,11 @@
 #include <iostream>
 #include <algorithm>
 #include <map>
+#include <list>
 #include <iterator>
 #include "allocator.h"
 #include "vec.h"
+#include "list2.h"
 
 constexpr auto factorial(auto n) -> decltype(n)
 {
@@ -30,35 +32,43 @@ int main()
     auto make_factorial_value = [i=0]() mutable
     {
         auto f = factorial(i);
-        std::cout << i << " " << f << std::endl;
-        auto value = std::make_pair(i,f);
+        auto value = std::make_pair(i, f);
         ++i;
         return value;
     };
 
     try
     {
+/*
         std::map<int, int> m1;
         std::generate_n(std::inserter(m1, std::begin(m1)),
-                        15,
+                        10,
                         make_factorial_value);
 
-        //for (const auto& p: m1)
-        //    std::cout << p.first << " " << p.second << std::endl;
-
-        std::cout << "-------------- my::alloc --------------\n";
+        for (const auto& p: m1)
+            std::cout << p.first << " " << p.second << std::endl;
 
         std::map<int, int, std::less<int>, my::allocator<std::pair<const int, int>, 10>> m2;
         std::generate_n(std::inserter(m2, std::begin(m2)),
-                        15,
+                        10,
                         make_factorial_value);
 
-        if (false)
         for (const auto& p: m2)
             std::cout << p.first << " " << p.second << std::endl;
+*/
+        my::LinkedList<int> l1;
+        for (auto i = 0; i < 10; ++i)
+            l1.append(factorial(i));
 
-        my::Vec<int> vec;
-        vec.push_back(10);
+        for (const auto& i: l1)
+            std::cout << i << std::endl;
+
+        my::LinkedList<int, my::allocator<my::Node<int>, 10>> l2;
+        for (auto i = 0; i < 10; ++i)
+            l2.append(factorial(i));
+
+        for (const auto& i: l2)
+            std::cout << i << std::endl;
     }
     catch(const std::exception &e)
     {

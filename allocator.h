@@ -15,10 +15,10 @@ class allocator
 
 public:
     using value_type = T;
-    //using pointer = T*;
-    //using const_pointer = const T*;
-    //using reference = T&;
-    //using const_reference = const T&;
+    using pointer = T*;
+    using const_pointer = const T*;
+    using reference = T&;
+    using const_reference = const T&;
 
     template <class U>
     struct rebind
@@ -30,7 +30,7 @@ public:
     template<class U>
     allocator(const allocator<U, capacity> &other) {}
 
-    T* allocate(size_t n)
+    T * allocate(size_t n)
     {
        if (n != 1)
            throw std::invalid_argument("Invalid numbers of elemens for allocate()");
