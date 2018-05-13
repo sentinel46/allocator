@@ -1,6 +1,6 @@
+#include <algorithm>
 #include <iostream>
 #include <map>
-#include <algorithm>
 
 #include "allocator.h"
 #include "linkedlist.h"
@@ -63,8 +63,6 @@ void usingCustomContainerWithCustomAllocator()
 
 int main()
 {
-//    std::cout << "-------------- my::alloc_counter=" << my::alloc_counter << std::endl;
-
     auto makeFactorialValue = [i=0]() mutable {
         auto f = factorial(i);
         auto value = std::make_pair(i, f);
@@ -81,8 +79,6 @@ int main()
     catch(const std::exception &e) {
         std::cerr << e.what() << std::endl;
     }
-
-//    std::cout << "-------------- my::alloc_counter=" << my::alloc_counter << std::endl;
 
     return 0;
 }

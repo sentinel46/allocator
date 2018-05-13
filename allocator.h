@@ -1,7 +1,5 @@
 #pragma once
 
-//#include "newdelete.h"
-
 #include <array>
 #include <memory>
 #include <vector>

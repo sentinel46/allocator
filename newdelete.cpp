@@ -1,8 +1,7 @@
 #include "newdelete.h"
 
+#include <cstdio>
 #include <cstdlib>
-#include <stdio.h>
-#include <new>
 
 namespace my
 {
