@@ -55,4 +55,4 @@ include(CPack)
 
 enable_testing()
 
-add_test(test_custom_allocator test_${PROJECT_NAME})
+add_test(test_${PROJECT_NAME} test_${PROJECT_NAME})
