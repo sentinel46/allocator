@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.2)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++14")
 
 set(VER 0.0.1)
 if($ENV{TRAVIS_BUILD_NUMBER})
@@ -8,26 +8,38 @@ if($ENV{TRAVIS_BUILD_NUMBER})
 endif()
 project(allocator VERSION ${VER})
 
+find_package(Boost COMPONENTS unit_test_framework REQUIRED)
+
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(SOURCES
-    main.cpp
-    newdelete.cpp)
+    main.cpp)
 
 set(HEADERS
     allocator.h
-    newdelete.h
     linkedlist.h)
 
 add_executable(${PROJECT_NAME}
     ${SOURCES}
     ${HEADERS})
 
+add_executable(test_${PROJECT_NAME}
+    newdelete.cpp
+    test_${PROJECT_NAME}.cpp)
+
 set_target_properties(${PROJECT_NAME} PROPERTIES
     CXX_STANDARD 14
     CXX_STANDARD_REQUIRED ON)
-
 add_compile_options(-Wall -Wextra)
+
+
+set_target_properties(test_${PROJECT_NAME} PROPERTIES
+    CXX_STANDARD 14
+    CXX_STANDARD_REQUIRED ON
+    COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK
+    INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR})
+#add_compile_options(-Wall -Wextra)
+
 
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
 
@@ -40,3 +52,7 @@ set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
 set(CPACK_PACKAGE_CONTACT altdaedroth@gmail.com)
 
 include(CPack)
+
+enable_testing()
+
+add_test(test_custom_allocator test_${PROJECT_NAME})

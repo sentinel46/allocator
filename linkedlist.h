@@ -1,7 +1,7 @@
+#pragma once
+
 #include <stdlib.h>
 #include <memory>
-
-#pragma once
 
 namespace my
 {
@@ -24,108 +24,101 @@ private:
     {
         using value_type = _T;
 
-        Node(): _next(nullptr) {}
-        Node(const _T &data): _data(data), _next(nullptr) {}
+        Node(): m_next{nullptr} {}
+        Node(const _T &data): m_data{data}, m_next{nullptr} {}
 
-        T _data;
-        Node<_T> *_next;
+        T m_data;
+        Node<_T> *m_next;
     };
 
-    std::size_t _size;
-    Node<T> *_head;
-    Node<T> *_tail;
-    _Node_alloc_type _alloc;
+    std::size_t m_size;
+    Node<T> *m_head;
+    Node<T> *m_tail;
+    _Node_alloc_type m_alloc;
 
 public:
     using value_type      = T;
-    using pointer         = T*;
-    using const_pointer   = const T*;
-    using reference       = T&;
-    using const_reference = const T&;
+    using pointer         = T *;
+    using const_pointer   = const T *;
+    using reference       = T &;
+    using const_reference = const T &;
 
     template <class _T>
     class LinkedListIterator
     {
-        Node<T> *_node;
+        Node<T> *m_node;
 
     public:
         using value_type      = T;
-        using pointer         = T*;
-        using const_pointer   = const T*;
-        using reference       = T&;
-        using const_reference = const T&;
+        using pointer         = T *;
+        using const_pointer   = const T *;
+        using reference       = T &;
+        using const_reference = const T &;
 
-        LinkedListIterator(Node<_T> *node) : _node(node) {}
+        LinkedListIterator(Node<_T> *node) : m_node{node} {}
         T & operator++()
         {
-            _node = _node->_next;
-            return _node->_data;
+            m_node = m_node->m_next;
+            return m_node->m_data;
         }
         T operator++(int)
         {
-            auto data = _node->_data;
-            _node = _node->_next;
+            auto data = m_node->m_data;
+            m_node = m_node->m_next;
             return data;
         }
         bool operator==(const LinkedListIterator &other) const
         {
             if (this == &other)
                 return true;
-            return _node == other._node;
+            return m_node == other.m_node;
         }
         bool operator!=(const LinkedListIterator &other) const { return !operator==(other); }
-        T & operator*() { return _node->_data; }
+        T & operator*() { return m_node->m_data; }
     };
 
     using iterator       = LinkedListIterator<T>;
     using const_iterator = LinkedListIterator<const T>;
 
     LinkedList() noexcept
-        : _size(0), _head(), _tail(), _alloc() {}
+        : m_size{0}, m_head{}, m_tail{}, m_alloc{} {}
 
     virtual ~LinkedList()
     {
-        while (_head)
+        while (m_head)
             remove();
     }
 
     void append(const T &value)
     {
-        //if (Node<T> *node = _alloc.allocate(1))
-        if (auto node = _alloc.allocate(1))
-        {
-            _alloc.construct(node, value);
-            node->_next = nullptr;
-            if (_head == nullptr)
-            {
-                _head = node;
-                _tail = node;
-            }
-            else
-            {
-                _tail->_next = node;
-                _tail = node;
+        if (auto node = m_alloc.allocate(1)) {
+            m_alloc.construct(node, value);
+            node->m_next = nullptr;
+            if (m_head == nullptr) {
+                m_head = node;
+                m_tail = node;
+            } else {
+                m_tail->m_next = node;
+                m_tail = node;
             }
         }
     }
 
     void remove()
     {
-        if (_head)
-        {
-            auto newHead = _head->_next;
-            //Node<T> *newHead = _head->_next;
-            _alloc.destroy(_head);
-            _alloc.deallocate(_head, 1);
-            _head = newHead;
+        if (m_head) {
+            auto newHead = m_head->m_next;
+            m_alloc.destroy(m_head);
+            m_alloc.deallocate(m_head, 1);
+            m_head = newHead;
         }
     }
 
-    int size() const { return _size; }
-    iterator begin() { return iterator(_head); }
-    const_iterator begin() const { return const_iterator(_head); }
-    iterator end() { return iterator(_tail->_next); }
-    const_iterator end() const { return const_iterator(_tail->_next); }
+    int size() const { return m_size; }
+    iterator begin() { return iterator(m_head); }
+    const_iterator begin() const { return const_iterator(m_head); }
+    iterator end() { return iterator(m_tail->m_next); }
+    const_iterator end() const { return const_iterator(m_tail->m_next); }
 };
 
 }   // namespace my

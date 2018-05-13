@@ -14,7 +14,7 @@ namespace my
 extern "C++"
 {
 
-inline void* operator new(std::size_t size) throw (std::bad_alloc)
+inline void * operator new(std::size_t size) throw (std::bad_alloc)
 {
     return my::malloc(size);
 }
@@ -24,7 +24,7 @@ inline void operator delete(void *p) noexcept
     my::free(p);
 }
 
-inline void* operator new[](std::size_t size) throw (std::bad_alloc)
+inline void * operator new[](std::size_t size) throw (std::bad_alloc)
 {
     return my::malloc(size);
 }
@@ -34,7 +34,7 @@ inline void operator delete[](void *p) throw()
     my::free(p);
 }
 
-inline void* operator new(size_t size, const std::nothrow_t&) noexcept
+inline void * operator new(size_t size, const std::nothrow_t&) noexcept
 {
     return my::malloc(size);
 }

@@ -1,4 +1,4 @@
-//#include "newdelete.h"
+#include "newdelete.h"
 
 #include <cstdlib>
 #include <stdio.h>
@@ -8,7 +8,7 @@ namespace my
 {
 size_t alloc_counter = 0;
 
-void* malloc(size_t size) throw (std::bad_alloc)
+void * malloc(size_t size) throw (std::bad_alloc)
 {
     void *p = std::malloc(size);
     printf("malloc: %zu %p %zu\n", ++alloc_counter, p, size);

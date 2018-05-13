@@ -16,10 +16,10 @@ class allocator
 
 public:
     using value_type = T;
-    using pointer = T*;
-    using const_pointer = const T*;
-    using reference = T&;
-    using const_reference = const T&;
+    using pointer = T *;
+    using const_pointer = const T *;
+    using reference = T &;
+    using const_reference = const T &;
 
     template <class U>
     struct rebind
@@ -36,19 +36,19 @@ public:
        if (n != 1)
            throw std::invalid_argument("Invalid numbers of elemens for allocate()");
 
-       _pool.resize(1 + _index / capacity);
-       _pool[_index/capacity].resize(capacity);
-       T *p = reinterpret_cast<T*>(&_pool[_index/capacity][_index%capacity]);
-       _index += n;
+       m_pool.resize(1 + m_index / capacity);
+       m_pool[m_index / capacity].resize(capacity);
+       T *p = reinterpret_cast<T *>(&m_pool[m_index / capacity][m_index % capacity]);
+       m_index += n;
        return p;
     }
 
-    void deallocate(T*, size_t) {}
+    void deallocate(T *, size_t) {}
 
     template<typename U, typename ... Args>
-    void construct(U *p, Args&&... args)
+    void construct(U *p, Args &&... args)
     {
-        new(p) U(std::forward<Args>(args)...);
+        new(p) U{std::forward<Args>(args)...};
     }
 
     void destroy(T *p)
@@ -57,9 +57,9 @@ public:
     }
 
 private:
-    //std::vector<std::array<T, capacity>> _pool;  // T() будет вызван capacity раз
-    std::vector<std::vector<std::array<unsigned char, sizeof(T)>>> _pool;
-    size_t _index = 0;
+    //std::vector<std::array<T, capacity>> m_pool;  // T{} будет вызван capacity раз
+    std::vector<std::vector<std::array<unsigned char, sizeof(T)>>> m_pool;
+    size_t m_index = 0;
 };
 
 }   // namespace my
