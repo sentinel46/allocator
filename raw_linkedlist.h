@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cstdlib>
+#include <stdlib.h>
 #include <memory>
 
 namespace my
@@ -13,10 +13,10 @@ class LinkedList
     struct Node;
 
 public:
-//    using _Tp_alloc_type     = typename __gnu_cxx::__alloc_traits<Alloc>::template rebind<T>::other;
-//    using _Tp_alloc_traits   = __gnu_cxx::__alloc_traits<_Tp_alloc_type>;
-//    using _Node_alloc_type   = typename _Tp_alloc_traits::template rebind<Node<T>>::other;
-    //using _Node_alloc_traits = __gnu_cxx::__alloc_traits<_Node_alloc_type>;
+    using _Tp_alloc_type     = typename __gnu_cxx::__alloc_traits<Alloc>::template rebind<T>::other;
+    using _Tp_alloc_traits   = __gnu_cxx::__alloc_traits<_Tp_alloc_type>;
+    using _Node_alloc_type   = typename _Tp_alloc_traits::template rebind<Node<T>>::other;
+    using _Node_alloc_traits = __gnu_cxx::__alloc_traits<_Node_alloc_type>;
 
 private:
     template <typename _T>
@@ -28,13 +28,13 @@ private:
         Node(const _T &data): m_data{data}, m_next{nullptr} {}
 
         T m_data;
-        std::shared_ptr<Node<_T>> m_next;
+        Node<_T> *m_next;
     };
 
     std::size_t m_size;
-    std::shared_ptr<Node<T>> m_head;
-    std::shared_ptr<Node<T>> m_tail;
-    Alloc m_alloc;
+    Node<T> *m_head;
+    Node<T> *m_tail;
+    _Node_alloc_type m_alloc;
 
 public:
     using value_type      = T;
@@ -47,15 +47,13 @@ public:
     class LinkedListIterator
     {
     public:
-        using iterator_tag    = std::forward_iterator_tag;
         using value_type      = T;
         using pointer         = T *;
         using const_pointer   = const T *;
         using reference       = T &;
         using const_reference = const T &;
 
-        LinkedListIterator(std::shared_ptr<Node<_T>> node) : m_node{node} {}
-
+        LinkedListIterator(Node<_T> *node) : m_node{node} {}
         T & operator++()
         {
             m_node = m_node->m_next;
@@ -77,7 +75,7 @@ public:
         T & operator*() { return m_node->m_data; }
 
     private:
-        std::shared_ptr<Node<T>> m_node;
+        Node<T> *m_node;
     };
 
     using iterator       = LinkedListIterator<T>;
@@ -85,21 +83,18 @@ public:
 
     LinkedList() noexcept
         : m_size{0}, m_head{}, m_tail{}, m_alloc{} {}
-/*
+
     virtual ~LinkedList()
     {
         while (m_head)
             pop_front();
     }
-*/
+
     void push_back(const T &value)
     {
-        if (auto node = std::allocate_shared<Node<T>, Alloc>(m_alloc, value)) {
-        //if (auto ptr = m_alloc.allocate(1)) {
-        //    m_alloc.construct(ptr, value);
-        //    std::shared_ptr<Node<T>> node(ptr);
-            //std::shared_ptr<Node<T>> node(ptr, std::default_delete<Node<T>>(), m_alloc);
-            //node->m_next = nullptr;
+        if (auto node = m_alloc.allocate(1)) {
+            m_alloc.construct(node, value);
+            node->m_next = nullptr;
             if (m_head == nullptr) {
                 m_head = node;
                 m_tail = node;
@@ -107,7 +102,6 @@ public:
                 m_tail->m_next = node;
                 m_tail = node;
             }
-            ++m_size;
         }
     }
 
@@ -115,8 +109,8 @@ public:
     {
         if (m_head) {
             auto newHead = m_head->m_next;
-//            m_alloc.destroy(m_head);
-//            m_alloc.deallocate(m_head, 1);
+            m_alloc.destroy(m_head);
+            m_alloc.deallocate(m_head, 1);
             m_head = newHead;
         }
     }

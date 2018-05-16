@@ -4,7 +4,7 @@
 
 #include "allocator.h"
 #include "factorial.h"
-#include "linkedlist.h"
+#include "raw_linkedlist.h"
 
 template <typename T>
 void usingStlContainerWithStlAllocator(T &&generator)
@@ -34,6 +34,8 @@ void usingCustomContainerWithStlAllocator()
 
     for (const auto &item: container)
         std::cout << item << std::endl;
+
+    auto it = container.begin();
 }
 
 void usingCustomContainerWithCustomAllocator()
@@ -56,8 +58,8 @@ int main()
     };
 
     try {
-//        usingStlContainerWithStlAllocator(makeFactorialValue);
-//        usingStlContainerWithCustomAllocator(makeFactorialValue);
+        //usingStlContainerWithStlAllocator(makeFactorialValue);
+        //usingStlContainerWithCustomAllocator(makeFactorialValue);
         usingCustomContainerWithStlAllocator();
         usingCustomContainerWithCustomAllocator();
     }

@@ -18,7 +18,8 @@ set(SOURCES
 set(HEADERS
     allocator.h
     factorial.h
-    linkedlist.h)
+    linkedlist.h
+    raw_linkedlist.h)
 
 add_executable(${PROJECT_NAME}
     ${SOURCES}
