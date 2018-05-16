@@ -17,6 +17,7 @@ set(SOURCES
 
 set(HEADERS
     allocator.h
+    factorial.h
     linkedlist.h)
 
 add_executable(${PROJECT_NAME}
@@ -24,6 +25,8 @@ add_executable(${PROJECT_NAME}
     ${HEADERS})
 
 add_executable(test_${PROJECT_NAME}
+    ${HEADERS}
+    newdelete.h
     newdelete.cpp
     test_${PROJECT_NAME}.cpp)
 

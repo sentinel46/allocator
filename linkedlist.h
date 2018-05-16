@@ -28,12 +28,12 @@ private:
         Node(const _T &data): m_data{data}, m_next{nullptr} {}
 
         T m_data;
-        Node<_T> *m_next;
+        std::shared_ptr<Node<_T>> m_next;
     };
 
     std::size_t m_size;
-    Node<T> *m_head;
-    Node<T> *m_tail;
+    std::shared_ptr<Node<T>> m_head;
+    std::shared_ptr<Node<T>> m_tail;
     _Node_alloc_type m_alloc;
 
 public:
@@ -46,16 +46,16 @@ public:
     template <class _T>
     class LinkedListIterator
     {
-        Node<T> *m_node;
-
     public:
+        using iterator_tag    = std::forward_iterator_tag;
         using value_type      = T;
         using pointer         = T *;
         using const_pointer   = const T *;
         using reference       = T &;
         using const_reference = const T &;
 
-        LinkedListIterator(Node<_T> *node) : m_node{node} {}
+        LinkedListIterator(std::shared_ptr<Node<_T>> node) : m_node{node} {}
+
         T & operator++()
         {
             m_node = m_node->m_next;
@@ -75,6 +75,9 @@ public:
         }
         bool operator!=(const LinkedListIterator &other) const { return !operator==(other); }
         T & operator*() { return m_node->m_data; }
+
+    private:
+        std::shared_ptr<Node<T>> m_node;
     };
 
     using iterator       = LinkedListIterator<T>;
@@ -82,17 +85,16 @@ public:
 
     LinkedList() noexcept
         : m_size{0}, m_head{}, m_tail{}, m_alloc{} {}
-
+/*
     virtual ~LinkedList()
     {
         while (m_head)
-            remove();
+            pop_front();
     }
-
-    void append(const T &value)
+*/
+    void push_back(const T &value)
     {
-        if (auto node = m_alloc.allocate(1)) {
-            m_alloc.construct(node, value);
+        if (auto node = std::allocate_shared<Node<T>, _Node_alloc_type>(m_alloc, value)) {
             node->m_next = nullptr;
             if (m_head == nullptr) {
                 m_head = node;
@@ -101,15 +103,16 @@ public:
                 m_tail->m_next = node;
                 m_tail = node;
             }
+            ++m_size;
         }
     }
 
-    void remove()
+    void pop_front()
     {
         if (m_head) {
             auto newHead = m_head->m_next;
-            m_alloc.destroy(m_head);
-            m_alloc.deallocate(m_head, 1);
+//            m_alloc.destroy(m_head);
+//            m_alloc.deallocate(m_head, 1);
             m_head = newHead;
         }
     }
